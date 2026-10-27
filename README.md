@@ -6,7 +6,7 @@ Contributions for Shahi et al. (in prep)
 
 ## Data
 
-Data required to run the analysis is downloaded from the Google Earth Engine asset 'UMD/hansen/global_forest_change_2025_v1_13' using continent extents from ESRI World Continents (https://hub.arcgis.com/datasets/esri::world-continents/explore) and biome extents from Shahi and Stenzel. 
+Data required to run the analysis is downloaded from the Google Earth Engine asset 'UMD/hansen/global_forest_change_2025_v1_13' using continent extents from [ESRI World Continents](https://hub.arcgis.com/datasets/esri::world-continents/explore) and biome extents from Shahi and Stenzel. 
 
 
 ## Dependencies
@@ -18,16 +18,16 @@ Project dependencies are listed in [`requirements.txt`](requirements.txt).
 
 The workflow has two stages: processing data in Google Earth Engine (`a1`, `a2`), and plotting figures (`b1`, `b2`). Run all commands from the repository root.
 
-| Script | Purpose | Output |
-|---|---|---|
-| `src/a1_gee_hansen_map.py` | Aggregates Hansen forest loss to 0.25° and exports multiband rasters per continent | Google Drive folder: hansen025deg |
-| `src/a2_gee_hansen_area.py` | Calculates forest loss area per biome and continent at 30 m | Google Drive folder: hansen30m |
-| `src/b1_plot_hansen_map.py` | Plots the 0.25° loss map | (Working directory) `data/figures/hansen_lossyear_025deg.png` |
-| `src/b2_plot_hansen_area.py` | Plots the area statistics | (Working directory) `data/figures/hansen_remainingforestcover_30m` |
+| Script | Purpose |
+|---|---|
+| [`a1_gee_hansen_map.py`](src/a1_gee_hansen_map.py) | Aggregates forest loss to 0.25° and exports multiband rasters per continent to the Google Drive folder: `hansen025deg` |
+| [`a2_gee_hansen_area.py`](src/a2_gee_hansen_area.py) | Calculates forest loss per biome and continent at 30 m and exports area to the Google Drive folder: `hansen30m` |
+| [`b1_plot_hansen_map.py`](src/b1_plot_hansen_map.py) | Plots the 0.25° loss map and exports to `data/figures/hansen_lossyear_025deg.png` |
+| [`b2_plot_hansen_area.py`](src/b2_plot_hansen_area.py) | Plots the area statistics ane exports to `data/figures/hansen_remainingforestcover_30m.png` |
 
 ### 1. Set up working directory
 
-Run `0_setup_directory.py` or manually create the folders: 'data', 'data/figures', 'data/hansen_gee_025deg', 'data/hansen_gee_30m'
+Run [`0_setup_directory.py`](src/0_setup_directory.py) or manually create the folders: `data`, `data/figures`, `data/hansen_gee_025deg`, `data/hansen_gee_30m`
 
 ```bash
 python src/0_setup_directory.py
@@ -52,7 +52,7 @@ python src/a1_gee_hansen_map.py --project your-gee-project
 python src/a2_gee_hansen_area.py --project your-gee-project
 ```
 
-These scripts only **start export tasks** on Google's servers. Monitor progress in the Earth Engine Task Manager (https://code.earthengine.google.com/tasks); large exports can take from minutes to hours.
+These scripts only **start export tasks** on Google's servers. Monitor progress in the [Earth Engine Task Manager](https://code.earthengine.google.com/tasks); large exports can take from minutes to hours.
 
 ### 4. Download the exports
 
