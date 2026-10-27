@@ -219,5 +219,5 @@ for k, geom in {**biomes, **continents}.items():
     task = ee.batch.Export.table.toDrive(
         collection=stats,
         description=k + '_loss',
-        folder='hansen_30m')
+        folder='hansen30m')
     task.start()
