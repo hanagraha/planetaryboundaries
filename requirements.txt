@@ -1,0 +1,7 @@
+numpy==2.5.4
+pandas==3.1.0
+geopandas==1.2.0
+matplotlib==3.11.2
+rasterio==1.5.2
+Cartopy==0.26.0
+earthengine-api==1.7.49
