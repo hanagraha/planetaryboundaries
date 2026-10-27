@@ -7,14 +7,30 @@ https://code.earthengine.google.com/3f92f006fecd4687c89377343fdcf224
 
 """
 
-# Authenticate google earth engine
+# Import libraries
+import argparse
 import ee
-ee.Authenticate()
-ee.Initialize(project="postdist-regrowth")
+
+# Define argument parser
+parser = argparse.ArgumentParser(description="Aggregate Hansen tree cover " \
+    "loss to 0.25 degrees and export to Google Drive.")
+
+# Add GEE Project ID argument
+parser.add_argument("--project", type=str, required=True,
+    help="Google Cloud project ID for Earth Engine.")
+args = parser.parse_args()
+
+# Initialize google earth engine, authenticate if needed
+try:
+    ee.Initialize(project=args.project)
+except Exception:
+    print("No credentials found, authenticating GEE...")
+    ee.Authenticate()
+    ee.Initialize(project=args.project)
 
 
 # ----------------------------------------------------------------------
-#                              READ DATA
+#                                READ DATA
 # ----------------------------------------------------------------------
 # Hansen et al. data
 hansen = ee.Image("UMD/hansen/global_forest_change_2025_v1_13")
@@ -26,7 +42,7 @@ land = hansen.select("datamask").eq(1)
 lossyear = hansen.select("lossyear").unmask(0)
 
 # Import continent geometries
-geompath = "projects/postdist-regrowth/assets/geometries/"
+geompath = f"projects/{args.project}/assets/geometries/"
 continents = {
     "af": ee.FeatureCollection(geompath + "geom_africa"),
     "as": ee.FeatureCollection(geompath + "geom_asia"),
@@ -161,7 +177,7 @@ if __name__ == "__main__":
         task = ee.batch.Export.image.toDrive(
             image=distimg,
             description=f"{k}_lossdistribution_025",
-            folder="hansen025_test",
+            folder="hansen025deg",
             crs="EPSG:4326",
             crsTransform=transform025,
             region=fc.geometry(),

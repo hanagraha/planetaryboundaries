@@ -7,10 +7,26 @@ https://code.earthengine.google.com/fb4d5a71976ccbe49aead04c9ea033fe
 
 """
 
-# Authenticate google earth engine
+# Import libraries
+import argparse
 import ee
-ee.Authenticate()
-ee.Initialize(project="postdist-regrowth")
+
+# Define argument parser
+parser = argparse.ArgumentParser(description="Aggregate Hansen tree cover " \
+    "loss to 0.25 degrees and export to Google Drive.")
+
+# Add GEE Project ID argument
+parser.add_argument("--project", type=str, required=True,
+    help="Google Cloud project ID for Earth Engine.")
+args = parser.parse_args()
+
+# Initialize google earth engine, authenticate if needed
+try:
+    ee.Initialize(project=args.project)
+except Exception:
+    print("No credentials found, authenticating GEE...")
+    ee.Authenticate()
+    ee.Initialize(project=args.project)
 
 
 # ----------------------------------------------------------------------
@@ -26,15 +42,15 @@ land = hansen.select('datamask').eq(1)
 lossyear = hansen.select('lossyear').unmask(0)
 
 # Create dictionary for continent geometries
-geom_path = 'projects/postdist-regrowth/assets/geometries/'
+geompath = f"projects/{args.project}/assets/geometries/"
 continents = {
-    'af': ee.FeatureCollection(geom_path + 'geom_africa'),
-    'as': ee.FeatureCollection(geom_path + 'geom_asia'),
-    'eu': ee.FeatureCollection(geom_path + 'geom_europe'),
-    'na': ee.FeatureCollection(geom_path + 'geom_namerica'),
-    'oc': ee.FeatureCollection(geom_path + 'geom_oceania')
-            .merge(ee.FeatureCollection(geom_path + 'geom_australia')),
-    'sa': ee.FeatureCollection(geom_path + 'geom_samerica'),
+    'af': ee.FeatureCollection(geompath + 'geom_africa'),
+    'as': ee.FeatureCollection(geompath + 'geom_asia'),
+    'eu': ee.FeatureCollection(geompath + 'geom_europe'),
+    'na': ee.FeatureCollection(geompath + 'geom_namerica'),
+    'oc': ee.FeatureCollection(geompath + 'geom_oceania')
+            .merge(ee.FeatureCollection(geompath + 'geom_australia')),
+    'sa': ee.FeatureCollection(geompath + 'geom_samerica'),
 }
 
 # Create dictionary for biome geometries
