@@ -1,5 +1,5 @@
 # planetaryboundaries
-Code repository for processing Hansen Global Forest Change data, exporting multiband rasters and area statistics from Google Earth Engine, and plotting figures for the land system change planetary boundary. 
+Code repository for processing Global Forest Change data from [Hansen et al. (2013)](https://www.science.org/doi/10.1126/science.1244693), exporting multiband rasters and area statistics from Google Earth Engine, and plotting figures for the land system change planetary boundary. 
 
 Contributions for Shahi et al. (in prep)
 
